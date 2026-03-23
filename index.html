@@ -4,195 +4,604 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Pokano｜AIなんでもガチ分析</title>
-    <meta name="description" content="どんな小さな疑問もAIでとことん深掘り。泥団子も恋愛も国際情勢も、同じ熱量で分析。くだらないことほど本気。">
-    <meta property="og:title" content="Pokano｜AIなんでもガチ分析">
-    <meta property="og:description" content="どんな小さな疑問もAIでとことん深掘り。くだらないことほど本気。">
-    <meta property="og:type" content="website">
+    <meta name="description" content="どんな小さな疑問もAIでとことん深掘り。泥団子も恋愛も国際情勢も、同じ熱量で分析。">
     <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🔍</text></svg>">
     <style>
-        :root {
-            --blue: #2196F3;
-            --purple: #7c3aed;
-            --dark: #1a1a2e;
-            --light: #f8faff;
-            --text: #333;
-            --text-dim: #666;
-        }
-        * { margin:0; padding:0; box-sizing:border-box; }
-        body { font-family:'Segoe UI','Hiragino Sans','Noto Sans JP',sans-serif; background:var(--light); color:var(--text); line-height:1.7; }
+        @import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;700;900&display=swap');
 
-        .container { max-width:680px; margin:0 auto; padding:40px 20px; }
+        :root {
+            --blue: #4facfe;
+            --purple: #7c3aed;
+            --pink: #f093fb;
+            --dark: #0a0a1a;
+            --card: rgba(255,255,255,0.06);
+            --card-border: rgba(255,255,255,0.1);
+            --glow-blue: rgba(79,172,254,0.3);
+            --glow-purple: rgba(124,58,237,0.3);
+        }
+
+        * { margin:0; padding:0; box-sizing:border-box; }
+
+        body {
+            font-family:'Nunito','Hiragino Sans','Noto Sans JP',sans-serif;
+            background:var(--dark);
+            color:#fff;
+            min-height:100vh;
+            overflow-x:hidden;
+        }
+
+        /* Animated gradient background */
+        .bg-gradient {
+            position:fixed;
+            top:0; left:0; right:0; bottom:0;
+            background:linear-gradient(135deg, #0a0a1a 0%, #1a1040 25%, #0a1628 50%, #1a0a28 75%, #0a0a1a 100%);
+            background-size:400% 400%;
+            animation:gradientShift 15s ease infinite;
+            z-index:-2;
+        }
+
+        @keyframes gradientShift {
+            0% { background-position:0% 50%; }
+            50% { background-position:100% 50%; }
+            100% { background-position:0% 50%; }
+        }
+
+        /* Floating particles */
+        .particles {
+            position:fixed;
+            top:0; left:0; right:0; bottom:0;
+            z-index:-1;
+            overflow:hidden;
+        }
+
+        .particle {
+            position:absolute;
+            border-radius:50%;
+            opacity:0.15;
+            animation:floatParticle linear infinite;
+        }
+
+        @keyframes floatParticle {
+            0% { transform:translateY(100vh) rotate(0deg); opacity:0; }
+            10% { opacity:0.15; }
+            90% { opacity:0.15; }
+            100% { transform:translateY(-10vh) rotate(360deg); opacity:0; }
+        }
+
+        /* Floating icons */
+        .floating-icons {
+            position:fixed;
+            top:0; left:0; right:0; bottom:0;
+            z-index:-1;
+            pointer-events:none;
+        }
+
+        .float-icon {
+            position:absolute;
+            font-size:24px;
+            opacity:0.08;
+            animation:floatIcon ease-in-out infinite;
+        }
+
+        @keyframes floatIcon {
+            0%,100% { transform:translateY(0) rotate(0deg); }
+            50% { transform:translateY(-20px) rotate(10deg); }
+        }
+
+        /* Container */
+        .container { max-width:520px; margin:0 auto; padding:30px 20px; position:relative; }
 
         /* Hero */
-        .hero { text-align:center; padding:60px 20px 40px; }
-        .logo { width:120px; height:120px; border-radius:24px; margin:0 auto 20px; box-shadow:0 8px 30px rgba(33,150,243,0.15); }
-        .hero h1 { font-size:28px; font-weight:800; color:var(--dark); margin-bottom:4px; }
-        .hero .handle { font-size:15px; color:var(--blue); margin-bottom:16px; }
-        .hero .tagline { font-size:14px; color:var(--text-dim); max-width:400px; margin:0 auto 8px; }
-        .hero .meaning { font-size:12px; color:var(--purple); margin-bottom:24px; }
+        .hero { text-align:center; padding:50px 0 30px; }
 
-        /* Social Icons */
-        .social-icons { display:flex; justify-content:center; gap:12px; margin-bottom:40px; }
-        .social-icon { width:40px; height:40px; border-radius:50%; display:flex; align-items:center; justify-content:center; text-decoration:none; color:#fff; font-size:14px; font-weight:700; transition:transform 0.2s; }
-        .social-icon:hover { transform:scale(1.1); }
+        .logo-wrapper {
+            position:relative;
+            display:inline-block;
+            margin-bottom:20px;
+        }
+
+        .logo {
+            width:110px; height:110px;
+            border-radius:24px;
+            position:relative;
+            z-index:1;
+            animation:logoPulse 3s ease-in-out infinite;
+        }
+
+        .logo-glow {
+            position:absolute;
+            top:-10px; left:-10px; right:-10px; bottom:-10px;
+            border-radius:30px;
+            background:linear-gradient(135deg, var(--glow-blue), var(--glow-purple));
+            filter:blur(20px);
+            animation:glowPulse 3s ease-in-out infinite;
+        }
+
+        @keyframes logoPulse {
+            0%,100% { transform:scale(1); }
+            50% { transform:scale(1.03); }
+        }
+
+        @keyframes glowPulse {
+            0%,100% { opacity:0.5; transform:scale(1); }
+            50% { opacity:0.8; transform:scale(1.1); }
+        }
+
+        .hero h1 {
+            font-size:32px;
+            font-weight:900;
+            background:linear-gradient(135deg, var(--blue), var(--purple), var(--pink));
+            background-size:200% 200%;
+            -webkit-background-clip:text;
+            -webkit-text-fill-color:transparent;
+            background-clip:text;
+            animation:gradientText 4s ease infinite;
+            margin-bottom:4px;
+        }
+
+        @keyframes gradientText {
+            0% { background-position:0% 50%; }
+            50% { background-position:100% 50%; }
+            100% { background-position:0% 50%; }
+        }
+
+        .handle {
+            font-size:14px;
+            color:var(--blue);
+            margin-bottom:16px;
+            opacity:0.8;
+        }
+
+        .tagline {
+            font-size:14px;
+            color:rgba(255,255,255,0.6);
+            line-height:1.8;
+            margin-bottom:8px;
+        }
+
+        .meaning {
+            font-size:12px;
+            color:var(--purple);
+            opacity:0.7;
+            margin-bottom:28px;
+        }
+
+        /* Typing animation */
+        .typing-wrapper {
+            display:inline-block;
+            margin-bottom:24px;
+        }
+
+        .typing {
+            font-size:13px;
+            color:var(--blue);
+            border-right:2px solid var(--blue);
+            padding-right:4px;
+            animation:blink 0.8s infinite;
+            white-space:nowrap;
+            overflow:hidden;
+        }
+
+        @keyframes blink {
+            0%,100% { border-color:var(--blue); }
+            50% { border-color:transparent; }
+        }
+
+        /* Social icons */
+        .social-icons {
+            display:flex;
+            justify-content:center;
+            gap:10px;
+            margin-bottom:36px;
+        }
+
+        .social-icon {
+            width:42px; height:42px;
+            border-radius:12px;
+            display:flex;
+            align-items:center;
+            justify-content:center;
+            text-decoration:none;
+            color:#fff;
+            font-size:15px;
+            font-weight:700;
+            transition:all 0.3s;
+            border:1px solid rgba(255,255,255,0.1);
+            background:rgba(255,255,255,0.05);
+            backdrop-filter:blur(10px);
+        }
+
+        .social-icon:hover {
+            transform:translateY(-4px) scale(1.1);
+            box-shadow:0 8px 25px rgba(79,172,254,0.3);
+            border-color:var(--blue);
+        }
 
         /* Section */
-        .section { margin-bottom:32px; }
-        .section-title { font-size:13px; font-weight:700; color:var(--purple); text-transform:uppercase; letter-spacing:2px; margin-bottom:12px; padding-left:4px; }
+        .section { margin-bottom:28px; }
 
-        /* Content Cards */
-        .content-card { display:block; background:#fff; border:1px solid #e8ecf4; border-radius:12px; padding:20px; margin-bottom:12px; text-decoration:none; color:var(--text); transition:all 0.2s; }
-        .content-card:hover { box-shadow:0 4px 16px rgba(0,0,0,0.06); transform:translateY(-2px); }
-        .content-card h3 { font-size:15px; font-weight:700; margin-bottom:4px; }
-        .content-card p { font-size:13px; color:var(--text-dim); margin:0; }
-        .content-card .badge { display:inline-block; font-size:10px; padding:2px 8px; border-radius:8px; font-weight:600; margin-bottom:6px; }
-        .badge-free { background:#d1fae5; color:#059669; }
-        .badge-new { background:#dbeafe; color:#2563eb; }
-        .badge-coming { background:#fef3c7; color:#d97706; }
+        .section-title {
+            font-size:11px;
+            font-weight:700;
+            color:var(--purple);
+            text-transform:uppercase;
+            letter-spacing:3px;
+            margin-bottom:14px;
+            padding-left:4px;
+            display:flex;
+            align-items:center;
+            gap:8px;
+        }
 
-        /* Link Buttons */
-        .link-btn { display:flex; align-items:center; gap:12px; background:#fff; border:1px solid #e8ecf4; border-radius:12px; padding:14px 20px; margin-bottom:10px; text-decoration:none; color:var(--text); transition:all 0.2s; }
-        .link-btn:hover { box-shadow:0 4px 16px rgba(0,0,0,0.06); transform:translateY(-1px); }
-        .link-btn .icon { width:36px; height:36px; border-radius:8px; display:flex; align-items:center; justify-content:center; font-size:14px; font-weight:700; color:#fff; flex-shrink:0; }
-        .link-btn .label { font-size:14px; font-weight:600; }
-        .link-btn .sublabel { font-size:12px; color:var(--text-dim); }
-        .link-btn .arrow { margin-left:auto; color:#ccc; font-size:18px; }
+        .section-title::after {
+            content:'';
+            flex:1;
+            height:1px;
+            background:linear-gradient(to right, var(--purple), transparent);
+        }
+
+        /* Content cards */
+        .content-card {
+            display:block;
+            background:var(--card);
+            border:1px solid var(--card-border);
+            border-radius:14px;
+            padding:18px;
+            margin-bottom:10px;
+            text-decoration:none;
+            color:#fff;
+            transition:all 0.3s;
+            backdrop-filter:blur(10px);
+            position:relative;
+            overflow:hidden;
+        }
+
+        .content-card::before {
+            content:'';
+            position:absolute;
+            top:0; left:0; right:0;
+            height:2px;
+            background:linear-gradient(to right, var(--blue), var(--purple));
+            opacity:0;
+            transition:opacity 0.3s;
+        }
+
+        .content-card:hover {
+            transform:translateY(-3px);
+            border-color:rgba(79,172,254,0.3);
+            box-shadow:0 8px 30px rgba(79,172,254,0.1);
+        }
+
+        .content-card:hover::before { opacity:1; }
+
+        .content-card h3 { font-size:14px; font-weight:700; margin-bottom:4px; }
+        .content-card p { font-size:12px; color:rgba(255,255,255,0.5); margin:0; }
+
+        .badge {
+            display:inline-block;
+            font-size:10px;
+            padding:2px 8px;
+            border-radius:6px;
+            font-weight:700;
+            margin-bottom:6px;
+        }
+
+        .badge-free { background:rgba(16,185,129,0.2); color:#34d399; border:1px solid rgba(16,185,129,0.3); }
+        .badge-new { background:rgba(79,172,254,0.2); color:var(--blue); border:1px solid rgba(79,172,254,0.3); }
+        .badge-coming { background:rgba(253,224,71,0.15); color:#fcd34d; border:1px solid rgba(253,224,71,0.2); }
+        .badge-paid { background:rgba(124,58,237,0.2); color:#a78bfa; border:1px solid rgba(124,58,237,0.3); }
+
+        .card-coming { opacity:0.5; cursor:default; }
+
+        /* Link buttons */
+        .link-btn {
+            display:flex;
+            align-items:center;
+            gap:12px;
+            background:var(--card);
+            border:1px solid var(--card-border);
+            border-radius:12px;
+            padding:12px 16px;
+            margin-bottom:8px;
+            text-decoration:none;
+            color:#fff;
+            transition:all 0.3s;
+            backdrop-filter:blur(10px);
+        }
+
+        .link-btn:hover {
+            transform:translateX(6px);
+            border-color:rgba(79,172,254,0.3);
+            box-shadow:0 4px 20px rgba(79,172,254,0.1);
+        }
+
+        .link-icon {
+            width:34px; height:34px;
+            border-radius:8px;
+            display:flex;
+            align-items:center;
+            justify-content:center;
+            font-size:14px;
+            font-weight:700;
+            flex-shrink:0;
+        }
+
+        .link-label { font-size:13px; font-weight:700; }
+        .link-sub { font-size:11px; color:rgba(255,255,255,0.4); }
+        .link-arrow { margin-left:auto; color:rgba(255,255,255,0.2); transition:all 0.3s; }
+        .link-btn:hover .link-arrow { color:var(--blue); transform:translateX(4px); }
 
         /* CTA */
-        .cta-card { background:linear-gradient(135deg, var(--blue), var(--purple)); border-radius:12px; padding:24px; text-align:center; color:#fff; margin-bottom:12px; }
-        .cta-card h3 { font-size:16px; margin-bottom:8px; }
-        .cta-card p { font-size:13px; opacity:0.85; margin-bottom:14px; }
-        .cta-btn { display:inline-block; background:#fff; color:var(--purple); font-weight:700; font-size:14px; padding:10px 28px; border-radius:8px; text-decoration:none; transition:transform 0.2s; }
-        .cta-btn:hover { transform:scale(1.05); }
+        .cta-card {
+            background:linear-gradient(135deg, rgba(79,172,254,0.15), rgba(124,58,237,0.15));
+            border:1px solid rgba(124,58,237,0.2);
+            border-radius:14px;
+            padding:24px;
+            text-align:center;
+            backdrop-filter:blur(10px);
+        }
+
+        .cta-card h3 { font-size:18px; margin-bottom:6px; }
+        .cta-card p { font-size:12px; color:rgba(255,255,255,0.5); margin-bottom:14px; }
+
+        .cta-btn {
+            display:inline-block;
+            background:linear-gradient(135deg, var(--blue), var(--purple));
+            color:#fff;
+            font-weight:700;
+            font-size:13px;
+            padding:10px 28px;
+            border-radius:10px;
+            text-decoration:none;
+            transition:all 0.3s;
+            box-shadow:0 4px 15px rgba(124,58,237,0.3);
+        }
+
+        .cta-btn:hover {
+            transform:translateY(-2px) scale(1.05);
+            box-shadow:0 8px 25px rgba(124,58,237,0.4);
+        }
+
+        /* Consulting */
+        .consult-card {
+            background:var(--card);
+            border:1px solid var(--card-border);
+            border-left:3px solid var(--purple);
+            border-radius:14px;
+            padding:20px;
+            backdrop-filter:blur(10px);
+        }
+
+        .consult-card h3 { font-size:15px; margin-bottom:6px; }
+        .consult-card p { font-size:12px; color:rgba(255,255,255,0.5); }
+        .consult-card a { color:var(--blue); text-decoration:none; }
+        .consult-card a:hover { text-decoration:underline; }
 
         /* Footer */
-        .footer { text-align:center; padding:30px 0; color:var(--text-dim); font-size:11px; }
+        .footer {
+            text-align:center;
+            padding:24px 0;
+            font-size:11px;
+            color:rgba(255,255,255,0.2);
+        }
 
+        /* Responsive */
         @media (max-width:480px) {
-            .hero { padding:40px 10px 30px; }
-            .hero h1 { font-size:24px; }
+            .hero h1 { font-size:26px; }
             .container { padding:20px 14px; }
         }
+
+        /* Entrance animation */
+        .fade-up {
+            opacity:0;
+            transform:translateY(20px);
+            animation:fadeUp 0.6s ease forwards;
+        }
+
+        @keyframes fadeUp {
+            to { opacity:1; transform:translateY(0); }
+        }
+
+        .delay-1 { animation-delay:0.1s; }
+        .delay-2 { animation-delay:0.2s; }
+        .delay-3 { animation-delay:0.3s; }
+        .delay-4 { animation-delay:0.4s; }
+        .delay-5 { animation-delay:0.5s; }
+        .delay-6 { animation-delay:0.6s; }
+        .delay-7 { animation-delay:0.7s; }
     </style>
 </head>
 <body>
 
+<!-- Animated background -->
+<div class="bg-gradient"></div>
+
+<!-- Floating particles -->
+<div class="particles" id="particles"></div>
+
+<!-- Floating topic icons -->
+<div class="floating-icons">
+    <div class="float-icon" style="top:8%;left:5%;animation-duration:4s;font-size:28px;">⚽</div>
+    <div class="float-icon" style="top:15%;right:8%;animation-duration:5s;animation-delay:1s;font-size:22px;">📚</div>
+    <div class="float-icon" style="top:30%;left:8%;animation-duration:6s;animation-delay:0.5s;font-size:20px;">❤️</div>
+    <div class="float-icon" style="top:45%;right:5%;animation-duration:4.5s;animation-delay:2s;font-size:26px;">🧪</div>
+    <div class="float-icon" style="top:60%;left:3%;animation-duration:5.5s;animation-delay:1.5s;font-size:24px;">🔍</div>
+    <div class="float-icon" style="top:75%;right:10%;animation-duration:4s;animation-delay:0.8s;font-size:20px;">🧠</div>
+    <div class="float-icon" style="top:85%;left:12%;animation-duration:6s;animation-delay:2.5s;font-size:22px;">⭐</div>
+    <div class="float-icon" style="top:20%;left:85%;animation-duration:5s;animation-delay:1.2s;font-size:18px;">🎲</div>
+    <div class="float-icon" style="top:55%;left:90%;animation-duration:4.5s;animation-delay:0.3s;font-size:20px;">🌍</div>
+    <div class="float-icon" style="top:40%;left:15%;animation-duration:5.5s;animation-delay:1.8s;font-size:16px;">💡</div>
+</div>
+
 <div class="container">
 
     <!-- Hero -->
-    <div class="hero">
-        <img src="logo.png" alt="Pokano" class="logo">
+    <div class="hero fade-up">
+        <div class="logo-wrapper">
+            <div class="logo-glow"></div>
+            <img src="logo.png" alt="Pokano" class="logo">
+        </div>
         <h1>Pokano</h1>
         <div class="handle">@pokano_ai</div>
-        <div class="tagline">どんな小さな疑問もAIでとことん深掘り。<br>泥団子も恋愛も国際情勢も、同じ熱量で分析。<br>くだらないことほど本気。</div>
+        <div class="tagline">
+            どんな小さな疑問もAIでとことん深掘り。<br>
+            泥団子も恋愛も国際情勢も、同じ熱量で分析。<br>
+            くだらないことほど本気。
+        </div>
         <div class="meaning">Pokano = Poke（つつく好奇心）+ Ano（あの…気になる）</div>
+
+        <div class="typing-wrapper">
+            <span class="typing" id="typingText"></span>
+        </div>
     </div>
 
     <!-- Social Icons -->
-    <div class="social-icons">
-        <a href="https://x.com/pokano_ai" target="_blank" class="social-icon" style="background:#000;" title="X">𝕏</a>
-        <a href="https://www.tiktok.com/@pokano_ai" target="_blank" class="social-icon" style="background:#010101;" title="TikTok">T</a>
-        <a href="https://www.youtube.com/@pokano_ai" target="_blank" class="social-icon" style="background:#ff0000;" title="YouTube">▶</a>
-        <a href="https://note.com/pokano_ai" target="_blank" class="social-icon" style="background:#2cb696;" title="note">N</a>
-        <a href="https://www.buymeacoffee.com/kanesaka849" target="_blank" class="social-icon" style="background:#FFDD00;color:#000;" title="Buy Me a Coffee">☕</a>
+    <div class="social-icons fade-up delay-1">
+        <a href="https://x.com/pokano_ai" target="_blank" class="social-icon" title="X">𝕏</a>
+        <a href="https://www.tiktok.com/@pokano_ai" target="_blank" class="social-icon" title="TikTok">T</a>
+        <a href="https://www.youtube.com/@pokano_ai" target="_blank" class="social-icon" title="YouTube">▶</a>
+        <a href="https://note.com/pokano_ai" target="_blank" class="social-icon" title="note">N</a>
+        <a href="https://www.buymeacoffee.com/kanesaka849" target="_blank" class="social-icon" title="Coffee">☕</a>
     </div>
 
     <!-- Articles -->
-    <div class="section">
+    <div class="section fade-up delay-2">
         <div class="section-title">Articles</div>
 
         <a href="https://kanesaka849.github.io/japan-wc-tactics/" class="content-card" target="_blank">
-            <span class="badge badge-free">無料</span>
-            <h3>ただのサッカー好きがAIに考えさせた日本代表W杯戦術プラン</h3>
+            <span class="badge badge-free">FREE</span>
+            <h3>⚽ ただのサッカー好きがAIに考えさせた日本代表W杯戦術プラン</h3>
             <p>世界の最新戦術理論を網羅的に分析し、日本代表のベスト戦術を設計</p>
         </a>
 
         <a href="https://kanesaka849.github.io/todai-strategy/" class="content-card" target="_blank">
-            <span class="badge badge-free">無料</span>
-            <h3>偏差値60から東大現役合格への完全戦略</h3>
+            <span class="badge badge-free">FREE</span>
+            <h3>📚 偏差値60から東大現役合格への完全戦略</h3>
             <p>あらゆる学習理論・脳科学・モチベーション研究をAIに分析させた合格プラン</p>
         </a>
 
-        <div class="content-card" style="cursor:default;opacity:0.7;">
-            <span class="badge badge-coming">Coming Soon</span>
-            <h3>AIに泥団子の作り方を本気で分析させてみた</h3>
-            <p>近日公開</p>
+        <div class="content-card card-coming">
+            <span class="badge badge-coming">COMING SOON</span>
+            <h3>🟤 AIに泥団子の作り方を本気で分析させてみた</h3>
+            <p>科学的に最強の泥団子を追求する</p>
         </div>
 
-        <div class="content-card" style="cursor:default;opacity:0.7;">
-            <span class="badge badge-coming">Coming Soon</span>
-            <h3>AI朝まで生テレビ：消費税は廃止すべきか？</h3>
-            <p>近日公開</p>
+        <div class="content-card card-coming">
+            <span class="badge badge-paid">PREMIUM</span>
+            <h3>🏛️ AI朝まで生テレビ：消費税は廃止すべきか？</h3>
+            <p>AIが推進派と廃止派に分かれて本気で討論。あなたはどっちが勝ったと思う？</p>
         </div>
     </div>
 
     <!-- Links -->
-    <div class="section">
-        <div class="section-title">Links</div>
+    <div class="section fade-up delay-3">
+        <div class="section-title">Follow</div>
 
         <a href="https://x.com/pokano_ai" target="_blank" class="link-btn">
-            <div class="icon" style="background:#000;">𝕏</div>
-            <div>
-                <div class="label">X (Twitter)</div>
-                <div class="sublabel">最新の分析をいち早くお届け</div>
-            </div>
-            <div class="arrow">→</div>
+            <div class="link-icon" style="background:rgba(255,255,255,0.1);">𝕏</div>
+            <div><div class="link-label">X (Twitter)</div><div class="link-sub">最新の分析をいち早くお届け</div></div>
+            <div class="link-arrow">→</div>
         </a>
 
         <a href="https://www.tiktok.com/@pokano_ai" target="_blank" class="link-btn">
-            <div class="icon" style="background:#010101;">T</div>
-            <div>
-                <div class="label">TikTok</div>
-                <div class="sublabel">1分でわかるAI分析動画</div>
-            </div>
-            <div class="arrow">→</div>
+            <div class="link-icon" style="background:rgba(255,255,255,0.1);">T</div>
+            <div><div class="link-label">TikTok</div><div class="link-sub">1分でわかるAI分析動画</div></div>
+            <div class="link-arrow">→</div>
         </a>
 
         <a href="https://note.com/pokano_ai" target="_blank" class="link-btn">
-            <div class="icon" style="background:#2cb696;">N</div>
-            <div>
-                <div class="label">note</div>
-                <div class="sublabel">じっくり読める分析記事</div>
-            </div>
-            <div class="arrow">→</div>
+            <div class="link-icon" style="background:rgba(255,255,255,0.1);">N</div>
+            <div><div class="link-label">note</div><div class="link-sub">じっくり読める分析記事</div></div>
+            <div class="link-arrow">→</div>
         </a>
 
         <a href="https://www.youtube.com/@pokano_ai" target="_blank" class="link-btn">
-            <div class="icon" style="background:#ff0000;">▶</div>
-            <div>
-                <div class="label">YouTube</div>
-                <div class="sublabel">ショート動画で深掘り分析</div>
-            </div>
-            <div class="arrow">→</div>
+            <div class="link-icon" style="background:rgba(255,255,255,0.1);">▶</div>
+            <div><div class="link-label">YouTube</div><div class="link-sub">ショート動画で深掘り分析</div></div>
+            <div class="link-arrow">→</div>
         </a>
     </div>
 
-    <!-- CTA: Coffee -->
-    <div class="section">
+    <!-- CTA -->
+    <div class="section fade-up delay-4">
         <div class="cta-card">
             <h3>☕ 応援する</h3>
-            <p>記事が役に立ったら、コーヒー1杯おごってください</p>
+            <p>面白いと思ったら、コーヒー1杯おごってください</p>
             <a href="https://www.buymeacoffee.com/kanesaka849" target="_blank" class="cta-btn">Buy me a coffee</a>
         </div>
     </div>
 
     <!-- Consulting -->
-    <div class="section">
+    <div class="section fade-up delay-5">
         <div class="section-title">Consulting</div>
-        <div class="content-card" style="border-left:3px solid var(--purple);">
-            <h3>AI活用コンサルティング</h3>
-            <p>企業向けにAIを活用した分析・コンテンツ制作・業務効率化をサポートします。</p>
-            <p style="margin-top:8px;font-size:13px;"><strong>お問い合わせ：</strong>ai_director@organic-work.com</p>
-            <p style="font-size:13px;">またはX (@pokano_ai) のDMへ</p>
+        <div class="consult-card">
+            <h3>🤖 AI活用コンサルティング</h3>
+            <p style="margin-bottom:8px;">企業向けにAIを活用した分析・コンテンツ制作・業務効率化をサポート。</p>
+            <p><strong>お問い合わせ：</strong><a href="mailto:ai_director@organic-work.com">ai_director@organic-work.com</a></p>
+            <p>またはX (<a href="https://x.com/pokano_ai" target="_blank">@pokano_ai</a>) のDMへ</p>
         </div>
     </div>
 
-    <!-- Footer -->
-    <div class="footer">
+    <div class="footer fade-up delay-6">
         &copy; 2026 Pokano. All rights reserved.
     </div>
 
 </div>
+
+<script>
+// Generate particles
+const particlesEl = document.getElementById('particles');
+const colors = ['#4facfe','#7c3aed','#f093fb','#34d399'];
+for(let i=0; i<30; i++){
+    const p = document.createElement('div');
+    p.classList.add('particle');
+    const size = Math.random()*4+2;
+    p.style.width = size+'px';
+    p.style.height = size+'px';
+    p.style.left = Math.random()*100+'%';
+    p.style.background = colors[Math.floor(Math.random()*colors.length)];
+    p.style.animationDuration = (Math.random()*15+10)+'s';
+    p.style.animationDelay = (Math.random()*10)+'s';
+    particlesEl.appendChild(p);
+}
+
+// Typing animation
+const phrases = [
+    'あの…泥団子の最適な作り方って何ですか？',
+    'あの…消費税って本当に必要ですか？',
+    'あの…W杯で日本が優勝する方法ってありますか？',
+    'あの…絶対叶う恋まじないってどれですか？',
+    'あの…偏差値60から東大って本当にいけますか？',
+    'あの…宇宙の終わりってどうなるんですか？',
+];
+let phraseIndex=0, charIndex=0, isDeleting=false;
+const typingEl=document.getElementById('typingText');
+
+function typeLoop(){
+    const current=phrases[phraseIndex];
+    if(!isDeleting){
+        typingEl.textContent=current.substring(0,charIndex+1);
+        charIndex++;
+        if(charIndex===current.length){
+            isDeleting=true;
+            setTimeout(typeLoop,2000);
+            return;
+        }
+        setTimeout(typeLoop,80);
+    } else {
+        typingEl.textContent=current.substring(0,charIndex-1);
+        charIndex--;
+        if(charIndex===0){
+            isDeleting=false;
+            phraseIndex=(phraseIndex+1)%phrases.length;
+            setTimeout(typeLoop,500);
+            return;
+        }
+        setTimeout(typeLoop,40);
+    }
+}
+typeLoop();
+</script>
 
 </body>
 </html>
